@@ -1,11 +1,11 @@
-const db = require("../db")
+const db = require(".")
 const Participant = require("./participant.model")
 
-const TeamMember = db.sequelize.define("team_member", {
+const TeamMember = db.sequelize.define("competition_team_member", {
     id: {
         type: db.DataTypes.UUID,
         defaultValue: db.DataTypes.UUIDV4,
-        allowNull: false, 
+        allowNull: false,
         primaryKey: true
     },
     name: {
@@ -14,9 +14,9 @@ const TeamMember = db.sequelize.define("team_member", {
     phone: {
         type: db.DataTypes.STRING
     },
-    },
+},
     {
-        timestamps: false, 
+        timestamps: false,
         freezeTableName: true
     })
 

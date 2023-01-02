@@ -1,7 +1,7 @@
 const db = require(".")
-const Participant = require("./participant.model")
+const Participant = require("./CompetitionMember")
 
-const Submission = db.sequelize.define("competition_submissions", {
+const Submission = db.sequelize.define("competition_team_submissions", {
     id: {
         type: db.DataTypes.UUID,
         defaultValue: db.DataTypes.UUIDV4,

@@ -19,7 +19,7 @@ module.exports = {
       memberId: {
         type: Sequelize.UUID,
         references: {
-          model: 'members',
+          model: 'user_members',
           key: 'id'
         }
       },

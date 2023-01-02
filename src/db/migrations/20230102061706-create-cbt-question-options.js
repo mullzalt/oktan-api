@@ -18,7 +18,7 @@ module.exports = {
       questionId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'questions',
+          model: 'cbt_questions',
           references: 'id'
         }
       },

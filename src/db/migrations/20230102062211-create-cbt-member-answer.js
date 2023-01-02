@@ -12,19 +12,19 @@ module.exports = {
       optionId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'options',
+          model: 'cbt_question_options',
           references: 'id'
         }
       },
       questionId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'questions',
+          model: 'cbt_questions',
           references: 'id'
         }
       },
       memberId: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         references: {
           model: 'cbt_members',
           references: 'id'

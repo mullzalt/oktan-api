@@ -19,17 +19,22 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
+      email: {
+        type: Sequelize.STRING
+      },
       roles: {
         type: Sequelize.ENUM('peserta', 'admin', 'panitia'),
         defaultValue: 'peserta'
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       }
     });
   },
