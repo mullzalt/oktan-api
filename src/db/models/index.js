@@ -1,23 +1,32 @@
-'use strict';
+require('dotenv').config()
+const { Sequelize, Op, DataTypes } = require('sequelize')
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const process = require('process');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../../configs/database.js')[env];
-const db = {};
+const env = process.env.NODE_ENV || 'development'
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+const database = require('../../configs/database')[env]
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-db.DataTypes = Sequelize.DataTypes
+const db = {}
 
-module.exports = db;
+const sequelize = new Sequelize(
+  database.database,
+  database.username,
+  database.password,
+  {
+    host: database.host,
+    dialect: 'mysql',
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
+    }
+  }
+)
+
+
+db.Sequelize = Sequelize
+db.sequelize = sequelize
+db.Op = Op
+db.DataTypes = DataTypes
+
+module.exports = db

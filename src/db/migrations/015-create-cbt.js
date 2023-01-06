@@ -9,9 +9,8 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4
       },
-      competitionId: {
-        type: Sequelize.UUID,
-        references: { model: 'competitions', key: 'id' }
+      title: {
+        type: Sequelize.STRING
       },
       startDate: {
         type: Sequelize.DATE

@@ -1,4 +1,4 @@
-const { Sequelize } = require(".");
+const { Sequelize } = require("sequelize");
 const db = require(".");
 
 const Cbt = db.sequelize.define('cbts', {
@@ -8,9 +8,8 @@ const Cbt = db.sequelize.define('cbts', {
     type: Sequelize.UUID,
     defaultValue: Sequelize.UUIDV4
   },
-  competitionId: {
-    type: Sequelize.UUID,
-    references: { model: 'competitions', key: 'id' }
+  title: {
+    type: Sequelize.STRING
   },
   startDate: {
     type: Sequelize.DATE
@@ -20,13 +19,10 @@ const Cbt = db.sequelize.define('cbts', {
   },
   duration: {
     type: Sequelize.INTEGER
-  },
-  createdAt: {
-    allowNull: false,
-    type: Sequelize.DATE
-  },
-  updatedAt: {
-    allowNull: false,
-    type: Sequelize.DATE
-  },
+  }
+}, {
+  freezeTableName: true,
+  timestamps: true
 })
+
+module.exports = Cbt

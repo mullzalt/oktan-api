@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class cbt_options extends Model {
+  class cbt_competition_requirement extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,13 +13,12 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  cbt_options.init({
-    option: DataTypes.TEXT,
-    imgUrl: DataTypes.TEXT,
-    questionId: DataTypes.INTEGER
+  cbt_competition_requirement.init({
+    competitionId: DataTypes.UUID,
+    cbtId: DataTypes.UUID
   }, {
     sequelize,
-    modelName: 'cbt_options',
+    modelName: 'cbt_competition_requirement',
   });
-  return cbt_options;
+  return cbt_competition_requirement;
 };

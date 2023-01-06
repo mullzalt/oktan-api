@@ -2,18 +2,19 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('cbt_questions', {
+    await queryInterface.createTable('cbt_competition_requirements', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      question: {
-        type: Sequelize.TEXT
-      },
-      imgUrl: {
-        type: Sequelize.TEXT
+      competitionId: {
+        type: Sequelize.UUID,
+        references: {
+          model: 'competitions',
+          key: 'id'
+        }
       },
       cbtId: {
         type: Sequelize.UUID,
@@ -33,6 +34,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('cbt_questions');
+    await queryInterface.dropTable('cbt_competition_requirements');
   }
 };

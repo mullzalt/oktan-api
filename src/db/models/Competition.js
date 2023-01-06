@@ -1,6 +1,6 @@
 const db = require(".")
 
-const Competition = db.sequelize.define("competition", {
+const Competition = db.sequelize.define("competitions", {
     id: {
         type: db.DataTypes.UUID,
         defaultValue: db.DataTypes.UUIDV4,
@@ -27,7 +27,7 @@ const Competition = db.sequelize.define("competition", {
         type: db.DataTypes.ENUM('FREE', 'REQUIRED', 'LATER'),
         defaultValue: 'FREE'
     },
-    precations: {
+    precautions: {
         type: db.DataTypes.TEXT
     },
     exam_type: {
