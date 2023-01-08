@@ -1,34 +1,81 @@
 const { cbt, cbtQuestion, cbtOption } = require('../controllers')
+const { validateJwt } = require('../middlewares/jwtValidation')
 const { validateCbt } = require('../middlewares/validation')
 
 const router = require('express').Router()
 
 router.route('/')
-    .post(validateCbt, cbt.createCbt)
-    .get(cbt.getCbts)
+    .post(validateJwt,
+        validateCbt, 
+        cbt.createCbt
+        )
+    .get(
+        validateJwt, 
+        cbt.getCbts
+        )
 
 router.route('/:cbtId')
-    .put(validateCbt, cbt.updateCbt)
-    .get(cbt.getCbtById)
-    .delete(cbt.deleteCbt)
+    .put(
+        validateJwt,
+        validateCbt, 
+        cbt.updateCbt
+        )
+    .get(
+        validateJwt,
+        cbt.getCbtById
+        )
+    .delete(
+        validateJwt,
+        cbt.deleteCbt
+        )
 
 router.route('/:cbtId/questions')
-    .get(cbtQuestion.getQuestions)
-    .post(cbtQuestion.createQuestion)
+    .get(
+        validateJwt,
+        cbtQuestion.getQuestions
+        )
+    .post(
+        validateJwt,
+        cbtQuestion.createQuestion
+        )
 
 router.route('/:cbtId/questions/:questionId')
-    .get(cbtQuestion.getQuestionById)
-    .put(cbtQuestion.updateQuestion)
-    .delete(cbtQuestion.deleteQuestion)
+    .get(
+        validateJwt,
+        cbtQuestion.getQuestionById
+        )
+    .put(
+        validateJwt,
+        cbtQuestion.updateQuestion
+        )
+    .delete(
+        validateJwt,
+        cbtQuestion.deleteQuestion
+        )
 
 router.route('/:cbtId/questions/:questionId/options')
-    .get(cbtOption.getOptions)
-    .post(cbtOption.createOption)
+    .get(
+        validateJwt,
+        cbtOption.getOptions
+        )
+    .post(
+        validateJwt,
+        cbtOption.createOption
+        )
 
 router.route('/:cbtId/questions/:questionId/options/:optionId')
-    .get(cbtOption.getOptionsById)
-    .put(cbtOption.updateOption)
-    .delete(cbtOption.deleteOption)
+    .get(
+        validateJwt,
+        cbtOption.getOptionsById
+        )
+    .put(
+        validateJwt,
+        cbtOption.updateOption
+        )
+    .delete(
+        validateJwt,
+        cbtOption.deleteOption
+        )
 
 
 module.exports = router

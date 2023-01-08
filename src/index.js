@@ -9,6 +9,8 @@ const path = require('path');
 const { Socket } = require("./webSocket");
 const apiRoutes = require("./routes");
 const { httpException } = require("./exceptions/httpExceptions");
+const corsOptions = require("./configs/corsOptions");
+const credentials = require("./middlewares/credentials");
 
 require('dotenv').config()
 
@@ -16,10 +18,14 @@ const app = express()
 
 const port = process.env.PORT || 8000
 
+
+app.use(credentials)
+
 app.use(helmet())
 app.use(cookieParser())
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(compression())
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 

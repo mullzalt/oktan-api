@@ -1,7 +1,7 @@
 const db = require(".")
-const User = require("./user")
+const User = require("./User")
 
-const VerificationToken = db.sequelize.define("verification_token", {
+const VerificationToken = db.sequelize.define("user_verification_tokens", {
     token: {
         type: db.DataTypes.STRING,
         allowNull: false,
@@ -10,16 +10,17 @@ const VerificationToken = db.sequelize.define("verification_token", {
     userId: {
         type: db.DataTypes.UUID,
         references: {
-            model: "user",
+            model: User,
             key: "id"
         }
     }
 },
     {
-        timestamps: false,
+        timestamps: true,
         freezeTableName: true
     })
 
 User.hasOne(VerificationToken)
+VerificationToken.belongsTo(User)
 
 module.exports = VerificationToken

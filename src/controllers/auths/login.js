@@ -9,7 +9,7 @@ const { generateJwt } = require("../../utils/jwt");
 const login = asyncHandler(async (req, res) => {
     const cookies = req.cookies
 
-    const { identifier, password } = req.body
+    const { identifier, password, remember } = req.body
 
     const user = await User.findOne({
         where: {
@@ -29,32 +29,35 @@ const login = asyncHandler(async (req, res) => {
 
     if (!isPasswordMatch) {
         res.status(400)
-        throw new Error('Wrong password!')
+        throw new Error('Password incorrect!')
     }
 
     if (!user.verified) {
-        res.status(401)
-        res.json({
-            message: 'Please confirm your email first!',
-            data: {
-                email: user.email
-            }
-        })
-        return
+        res.status(403)
+        const err = new Error('User not verified, please confirm your email first!')
+        err.data = {
+            email: user.email
+        }
+        throw err
     }
 
+    const expireTime = remember === true ? { expiresIn: '1y'} : {expiresIn: '2d'}
+    const cookieExpire = remember === true ? { maxAge: 365 * 24 * 60 * 60 * 1000} : {maxAge: 2 * 24 * 60 * 60 * 1000}
+
     const accessToken = generateJwt({ id: user.id })
-    const refreshToken = generateJwt({ id: user.id }, { expiresIn: '2d' })
+    const refreshToken = generateJwt({ id: user.id }, { ...expireTime})
 
     if (cookies?.refreshToken) {
         res.clearCookie('refreshToken');
     }
 
     return res.status(200)
-        .cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
+        .cookie('refreshToken', refreshToken, { httpOnly: true, ...cookieExpire})
         .json({
             message: 'Login Successful',
-            accessToken
+            accessToken, 
+            expireTime, 
+            cookieExpire
         })
 
 })
