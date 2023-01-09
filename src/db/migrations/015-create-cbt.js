@@ -21,6 +21,24 @@ module.exports = {
       duration: {
         type: Sequelize.INTEGER
       },
+      optionCount: {
+        type: Sequelize.INTEGER
+      },
+      onCorrectPoint: {
+        type: Sequelize.INTEGER
+      },
+      onNullPoint: {
+        type: Sequelize.INTEGER
+      },
+      onWrongPoint: {
+        type: Sequelize.INTEGER
+      },
+      imgUrl: {
+        type: Sequelize.INTEGER
+      },
+      archived: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

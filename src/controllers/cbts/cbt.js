@@ -1,14 +1,21 @@
 const asyncHandler = require("express-async-handler");
+const { Op } = require("sequelize");
 const { Cbt } = require("../../db");
+const { makePagination, paginationResults } = require("../../utils/paginate");
 
 const createCbt = asyncHandler(async (req, res) => {
-    const { title, startDate, endDate, duration } = req.body
+    const { title, startDate, endDate, duration, optionCount, onCorrectPoint, onNullPoint, onWrongPoint,imgUrl } = req.body
 
     const cbt = await Cbt.create({
         title,
         startDate,
         endDate,
-        duration
+        duration,
+        optionCount,
+        onCorrectPoint,
+        onNullPoint,
+        onWrongPoint,
+        imgUrl
     })
 
     res.status(201)
@@ -19,7 +26,7 @@ const createCbt = asyncHandler(async (req, res) => {
 })
 
 const updateCbt = asyncHandler(async (req, res) => {
-    const { title, startDate, endDate, duration } = req.body
+    const { title, startDate, endDate, duration, optionCount, onCorrectPoint, onNullPoint, onWrongPoint,imgUrl } = req.body
     const { cbtId } = req.params
 
     const cbt = await Cbt.findOne({
@@ -35,7 +42,12 @@ const updateCbt = asyncHandler(async (req, res) => {
         title,
         startDate,
         endDate,
-        duration
+        duration,
+        optionCount,
+        onCorrectPoint,
+        onNullPoint,
+        onWrongPoint,
+        imgUrl
     })
 
     res.status(200)
@@ -64,6 +76,7 @@ const getCbtById = asyncHandler(async (req, res) => {
 
 const deleteCbt = asyncHandler(async (req, res) => {
     const { cbtId } = req.params
+    
 
     const cbt = await Cbt.findOne({
         where: { id: cbtId }
@@ -84,10 +97,35 @@ const deleteCbt = asyncHandler(async (req, res) => {
 })
 
 const getCbts = asyncHandler(async (req, res) => {
-    const cbt = await Cbt.findAll()
+    const {search, archived, size, page} = req.query
+
+    const getWhere = search ? {
+        [Op.or] : [
+            {title: {[Op.like]: `%${search}%`}},
+        ]
+    } : null
+
+    const getArchived = archived === 'false' ? {archived : false} : archived === 'true' ? {archived : true} : null
+
+    const condition = {
+        [Op.and]: [
+            getWhere, 
+            getArchived
+        ]
+    }
+
+    const {limit, offset} = makePagination(page, size)
+    
+    const cbt = await Cbt.findAndCountAll({
+        where: condition, 
+        limit: limit, 
+        offset: offset
+    })
+
+    const result = paginationResults({...cbt, page, limit})
 
     res.status(200)
-    res.json(cbt)
+    res.json(result)
     return
 })
 

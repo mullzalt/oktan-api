@@ -30,6 +30,15 @@ module.exports = {
           references: 'id'
         }
       },
+      isCorrect: {
+        type: Sequelize.BOOLEAN
+      },
+      isEmpty: {
+        type: Sequelize.BOOLEAN
+      },
+      isWrong: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

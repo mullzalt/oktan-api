@@ -18,7 +18,31 @@ const Cbt = db.sequelize.define('cbts', {
     type: Sequelize.DATE
   },
   duration: {
+    type: Sequelize.INTEGER,
+    defaultValue: 60
+  },
+  optionCount: {
+    type: Sequelize.INTEGER,
+    defaultValue: 10
+  },
+  onCorrectPoint: {
+    type: Sequelize.INTEGER,
+    defaultValue: 3
+  },
+  onNullPoint: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0
+  },
+  onWrongPoint: {
+    type: Sequelize.INTEGER, 
+    defaultValue: -1
+  },
+  imgUrl: {
     type: Sequelize.INTEGER
+  },
+  archived: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
 }, {
   freezeTableName: true,
