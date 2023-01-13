@@ -34,11 +34,11 @@ const Cbt = db.sequelize.define('cbts', {
     defaultValue: 0
   },
   onWrongPoint: {
-    type: Sequelize.INTEGER, 
+    type: Sequelize.INTEGER,
     defaultValue: -1
   },
   imgUrl: {
-    type: Sequelize.INTEGER
+    type: Sequelize.TEXT
   },
   archived: {
     type: Sequelize.BOOLEAN,

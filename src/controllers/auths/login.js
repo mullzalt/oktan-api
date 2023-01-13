@@ -41,22 +41,22 @@ const login = asyncHandler(async (req, res) => {
         throw err
     }
 
-    const expireTime = remember === true ? { expiresIn: '1y'} : {expiresIn: '2d'}
-    const cookieExpire = remember === true ? { maxAge: 365 * 24 * 60 * 60 * 1000} : {maxAge: 2 * 24 * 60 * 60 * 1000}
+    const expireTime = remember === true ? { expiresIn: '1y' } : { expiresIn: '2d' }
+    const cookieExpire = remember === true ? { maxAge: 365 * 24 * 60 * 60 * 1000 } : { maxAge: 2 * 24 * 60 * 60 * 1000 }
 
     const accessToken = generateJwt({ id: user.id })
-    const refreshToken = generateJwt({ id: user.id }, { ...expireTime})
+    const refreshToken = generateJwt({ id: user.id }, { ...expireTime })
 
     if (cookies?.refreshToken) {
         res.clearCookie('refreshToken');
     }
 
     return res.status(200)
-        .cookie('refreshToken', refreshToken, { httpOnly: true, ...cookieExpire})
+        .cookie('refreshToken', refreshToken, { httpOnly: true, ...cookieExpire })
         .json({
             message: 'Login Successful',
-            accessToken, 
-            expireTime, 
+            accessToken,
+            expireTime,
             cookieExpire
         })
 

@@ -12,8 +12,8 @@ const httpException = async (err, req, res, next) => {
     res.status(status)
     res.json({
         message,
+        data,
         stack,
-        data
     })
     return
 }

@@ -34,7 +34,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       imgUrl: {
-        type: Sequelize.INTEGER
+        type: Sequelize.TEXT
       },
       archived: {
         type: Sequelize.BOOLEAN

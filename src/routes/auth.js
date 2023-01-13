@@ -1,12 +1,18 @@
 const router = require('express').Router()
 
-const { login, refresh, register, verifyAccount, resendMail } = require('../controllers')
+const { login, refresh, register, verifyAccount, resendMail, getMe } = require('../controllers')
+const { validateJwt } = require('../middlewares/jwtValidation')
 const { validateLogin, validateRegister } = require('../middlewares/validation')
 
 
 router.route('/login').post(
     validateLogin,
     login
+)
+
+router.route('/me').get(
+    validateJwt,
+    getMe,
 )
 
 router.route('/register').post(

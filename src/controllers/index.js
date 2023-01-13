@@ -7,7 +7,8 @@ const register = require("./auths/register");
 const { verifyAccount } = require("./auths/verifyAccount");
 const { resendMail } = require("./auths/sendVerifyMail");
 const { getUsers } = require("./users/crudUser");
-
+const { uploadCbtCover } = require("./cbts/cbtCover");
+const { getMe } = require("./auths/getMe");
 
 
 module.exports = {
@@ -16,6 +17,7 @@ module.exports = {
     refresh,
     verifyAccount,
     resendMail,
+    getMe,
 
     user: {
         getUsers
@@ -26,7 +28,8 @@ module.exports = {
         updateCbt,
         getCbts,
         getCbtById,
-        deleteCbt
+        deleteCbt,
+        uploadCbtCover
     },
 
     cbtQuestion: {

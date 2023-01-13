@@ -1,5 +1,6 @@
 require('dotenv').config()
 const { Sequelize, Op, DataTypes } = require('sequelize')
+const fs = require('fs')
 
 const env = process.env.NODE_ENV || 'development'
 
