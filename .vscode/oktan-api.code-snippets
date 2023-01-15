@@ -15,10 +15,8 @@
 	// 	],
 	// 	"description": "Log output to console"
 	// }
-
-
 	"New empty async request with library and module exports": {
-		"scope": "javascript", 
+		"scope": "javascript",
 		"prefix": "aschan",
 		"body": [
 			"const asyncHandler = require('express-async-handler');",
@@ -28,27 +26,37 @@
 			"})",
 			"",
 			"module.exports = {$1}"
-		], 
+		],
 		"description": "new express async handler function with library and module export"
 	},
 	"New async request": {
-		"scope": "javascript", 
+		"scope": "javascript",
 		"prefix": "asc",
 		"body": [
 			"const $1 = asyncHandler(async(req, res) =>{",
 			"$2",
 			"})"
-		], 
+		],
 		"description": "new express async handler function"
 	},
 	"New async middleware": {
-		"scope": "javascript", 
+		"scope": "javascript",
 		"prefix": "ascn",
 		"body": [
-			"const $1 = asyncHandler(async(req, res, next) =>{",
-			"$2",
+			"const ${1:name} = asyncHandler(async(req, res, next) =>{",
+			"\t${2:function}",
 			"})"
-		], 
+		],
 		"description": "new express async handler middleware function"
+	},
+	"Return async with asyncHandler": {
+		"scope": "javascript",
+		"prefix": "ascr",
+		"body": [
+			"return asyncHandler(async(req, res) =>{",
+			"\t${1:function}",
+			"})"
+		],
+		"description": "new express async handler return function"
 	}
 }
