@@ -20,5 +20,7 @@ module.exports = {
     Cbt,
     CbtQuestion,
     CbtOption,
-    CbtAnswer
+    CbtAnswer,
+    CbtMember: require('./models/CbtMember'), 
+    CbtMemberAnswer: require('./models/CbtMemberAnswer')
 }

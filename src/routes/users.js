@@ -3,6 +3,7 @@ const router = require('express').Router()
 const { CrudController } = require('../controllers/Controller')
 const { fileUploader } = require('../middlewares/fileUpload')
 const { validateJwt } = require('../middlewares/jwtValidation')
+const { findByParam } = require('../middlewares/paramsMiddelware')
 
 const user = new CrudController('User')
 
@@ -47,6 +48,19 @@ router.route('/:userId/profile/:profileId').put(
         param: 'profileId',
         upload: {destination: 'users/avatar', attribute: 'avatar'}, 
     })
+)
+
+const userAnswer = new CrudController('CbtMemberAnswer')
+
+router.route('/:userId/cbts/:cbtId/answers/:questionId').post(
+    validateJwt, 
+    findByParam([
+        {table: 'User', where: [{attribute: 'id', param: 'userId'}]},
+        {table: 'Cbt', where: [{attribute: 'id', param: 'cbtId'}]}
+    ]),
+    userAnswer.upsert({param: 'questionId', attribute: 'questionId', parents: [
+        {attribute: 'userId', param: 'userId'},
+    ]})
 )
 
 module.exports = router

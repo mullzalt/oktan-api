@@ -18,10 +18,10 @@ module.exports = {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       },
-      memberId: {
+      userId: {
         type: Sequelize.UUID,
         references: {
-          model: 'user_profiles',
+          model: 'users',
           key: 'id'
         }, 
         onDelete: 'CASCADE',

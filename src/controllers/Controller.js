@@ -135,6 +135,103 @@ class CrudController {
 
 
     /**
+     * Create new upsert/post/put router
+     * @param {Object} options 
+     * @param {Object} [options.upload]
+     * @param {string} options.upload.attribute
+     * @param {string} options.upload.destination
+     * @param {boolean} [options.upload.includeId = false]
+     * @param {string} options.param
+     * @param {string} options.attribute
+     * @param {string[]} [options.allowedBody]
+     * @param {Object[]} [options.parents]
+     * @param {string} options.parents.attribute
+     * @param {string} options.parents.param
+     * @returns 
+     */
+    upsert(options) {
+        return asyncHandler(async (req, res) => {
+            const {id, filename, ...data} = req.body
+
+            const a = await models.CbtMemberAnswer.findAll()
+
+            return res.json(a)
+
+            let where = {[options.attribute]: req.params[options.param]}
+
+            const file = req.file
+
+            let updateData = data
+
+            let parents = {}
+
+            if(options.parents){
+
+                options.parents.map(parent => {
+                    Object.assign(parents, {[parent.attribute]: req.params[parent.param]})
+                })
+
+            }
+
+            if(options?.allowedBody){
+                updateData = {}
+
+                options.allowedBody.map(body => {
+                    Object.assign(updateData, {[body]: req.body[body]})
+                })
+            }
+
+            let result
+
+            result = await models[this.#table].findOne({
+                where: where
+            })
+
+            if (!result) {
+                result = await models[this.#table].create({
+                    ...updateData
+                })
+            }
+
+            if(result){
+                await result.update({...updateData})
+            }
+
+            
+            if (file && options?.upload) {
+                const {destination, attribute, includeId = false} = options?.upload
+                let newDestination
+
+                newDestination = destination
+    
+                const resultId = result.id
+    
+                if(includeId){
+                    newDestination = `${destination}/${resultId}`
+                }
+
+
+                const fileData = await uploadHandler({
+                    file, 
+                    destination: newDestination,
+                    filename
+                })
+                const url = fileData.url
+                await result.update({
+                    [attribute]: url
+                })
+            }
+
+
+            res.json({ 'message': `${this.#table} updated` ,...result })
+        })
+
+        
+    }
+
+
+
+    /**
      * @param {Object} options
      * @param {Object[]} options.where
      * @param {string} options.where.param - param that indicate attributs value
