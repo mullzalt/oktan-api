@@ -47,6 +47,18 @@ router.route('/:cbtId')
         cbtController.delete({param: 'cbtId', attribute: 'title'})
     )
 
+
+// const cbtRequiremnetController = new CrudController('CbtRequirement')
+
+// router.route('/:cbtId/requirements').post(
+//     validateCbt, 
+//     cbtRequiremnetController.upsert({
+//         parents: [
+//             {param: 'cbtId', attribute: 'cbtId'}
+//         ]
+//     })
+// )
+
 const questionController = new CrudController('CbtQuestion')
 
 router.route('/:cbtId/questions')

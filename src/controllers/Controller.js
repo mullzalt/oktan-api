@@ -141,8 +141,9 @@ class CrudController {
      * @param {string} options.upload.attribute
      * @param {string} options.upload.destination
      * @param {boolean} [options.upload.includeId = false]
-     * @param {string} options.param
-     * @param {string} options.attribute
+     * @param {Object[]} options.where
+     * @param {string} options.where.param
+     * @param {string} options.where.attribute
      * @param {string[]} [options.allowedBody]
      * @param {Object[]} [options.parents]
      * @param {string} options.parents.attribute
@@ -153,11 +154,17 @@ class CrudController {
         return asyncHandler(async (req, res) => {
             const {id, filename, ...data} = req.body
 
-            const a = await models.CbtMemberAnswer.findAll()
+            let where = []
 
-            return res.json(a)
+            if(options.where){
+                options.where.map(w => {
+                    where.push({[w.attribute]: req.params[w.param]})
+                })
+            }
 
-            let where = {[options.attribute]: req.params[options.param]}
+            const condition = {
+                [Op.and]: where
+            }
 
             const file = req.file
 
@@ -165,12 +172,10 @@ class CrudController {
 
             let parents = {}
 
-            if(options.parents){
-
+            if(options?.parents){
                 options.parents.map(parent => {
                     Object.assign(parents, {[parent.attribute]: req.params[parent.param]})
                 })
-
             }
 
             if(options?.allowedBody){
@@ -184,20 +189,17 @@ class CrudController {
             let result
 
             result = await models[this.#table].findOne({
-                where: where
+                where: condition
             })
 
             if (!result) {
                 result = await models[this.#table].create({
-                    ...updateData
+                    ...updateData, ...parents
                 })
+            }else{
+                await result.update({...updateData, ...parents})
             }
 
-            if(result){
-                await result.update({...updateData})
-            }
-
-            
             if (file && options?.upload) {
                 const {destination, attribute, includeId = false} = options?.upload
                 let newDestination
@@ -222,8 +224,9 @@ class CrudController {
                 })
             }
 
+            const datavalues = result.dataValues || result
 
-            res.json({ 'message': `${this.#table} updated` ,...result })
+            res.json({ 'message': `${this.#table} updated` ,...datavalues })
         })
 
         

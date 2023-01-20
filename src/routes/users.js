@@ -50,17 +50,5 @@ router.route('/:userId/profile/:profileId').put(
     })
 )
 
-const userAnswer = new CrudController('CbtMemberAnswer')
-
-router.route('/:userId/cbts/:cbtId/answers/:questionId').post(
-    validateJwt, 
-    findByParam([
-        {table: 'User', where: [{attribute: 'id', param: 'userId'}]},
-        {table: 'Cbt', where: [{attribute: 'id', param: 'cbtId'}]}
-    ]),
-    userAnswer.upsert({param: 'questionId', attribute: 'questionId', parents: [
-        {attribute: 'userId', param: 'userId'},
-    ]})
-)
 
 module.exports = router

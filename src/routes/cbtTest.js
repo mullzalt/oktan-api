@@ -7,12 +7,64 @@ const { validateCbt } = require('../middlewares/validation')
 
 const router = require('express').Router()
 
-const cbtController = new CrudController('Cbt')
+const   cbtMemberController = new CrudController('CbtMember')
+router.route('/:userId/cbts').get(
+    validateJwt, 
+    cbtMemberController.getAll({
+        searchParam: ['userId'],
+        parentParam: [
+            {attribute: 'userId', param: 'userId'}
+        ]
+    })
+)
+
+
+router.route('/:userId/cbts/:cbtId').post(
+    validateJwt, 
+    cbtMemberController.upsert({
+        parents: [
+            {attribute: 'userId', param: 'userId'}, 
+            {attribute: 'cbtId', param: 'cbtId'}
+        ], 
+        where: [
+            {param: 'userId', attribute: 'userId'},
+            {param: 'cbtId', attribute: 'cbtId'},
+        ]
+    })
+)
+
+const memberAnswer = new CrudController('CbtMemberAnswer')
+
+router.route('/:userId/cbts/:cbtId/answers/:memberId').get(
+    validateJwt, 
+    memberAnswer.getAll({
+          searchParam: ['memberId'],
+        parentParam: [
+            {attribute: 'memberId', param: 'memberId'},
+            {attribute: 'cbtId', param: 'cbtId'},
+        ]
+    })
+)
+
+
+router.route('/:userId/cbts/:cbtId/answers/:memberId/questions/:questionId').post(
+    validateJwt, 
+    memberAnswer.upsert({
+        parents: [
+            {attribute: 'memberId', param: 'memberId'},
+            {attribute: 'questionId', param: 'questionId'},
+        ], 
+        where: [
+            {param: 'memberId', attribute: 'memberId'},
+            {param: 'questionId', attribute: 'questionId'},
+        ]
+    })
+)
 
 
 const questionController = new CrudController('CbtQuestion')
 
-router.route('/:cbtId/questions')
+router.route(':userId/cbts/:cbtId/questions')
     .get(
         validateJwt,
         findByParam({table: 'Cbt', where: [
@@ -28,82 +80,6 @@ router.route('/:cbtId/questions')
                 { attribute: 'startDate', query: 'startDate', isBool: false },
             ], 
             randomSort: true
-        })
-    )
-    .post(
-        validateJwt,
-        checkAnswer
-    )
-
-router.route('/:cbtId/questions/:questionId')
-    .get(
-        validateJwt,
-        questionController.getByParam({
-            where: [
-                {param: 'questionId', attribue: 'id'},
-                {param: 'cbtId', attribue: 'cbtId', isRequired: true},
-            ], 
-            include: [{model: 'CbtOption', as: 'options'}]
-        })
-    )
-    .put(
-        validateJwt,
-        fileUploader, 
-        questionController.put({upload: {paramId: 'cbtId', destination: 'cbt', attribute: 'imgUrl'}, param: 'questionId'})
-    )
-    .delete(
-        validateJwt,
-        questionController.delete({param: 'questionId', attribute: 'question'})
-    )
-
-
-const optionController = new CrudController('CbtOption')
-
-router.route('/:cbtId/questions/:questionId/options')
-    .get(
-        validateJwt,
-        optionController.getAll({
-            searchParam: ['option'],
-            parentParam: [{
-                attribute: 'questionId', param: 'questionId'
-            }],
-        })
-    )
-    .post(
-        validateJwt,
-        findByParam({table: 'CbtQuestion', where: [
-            {attribute: 'id', param: 'questionId'},
-            {attribute: 'cbtId', param: 'cbtId'},
-        ]}),
-        fileUploader,
-        optionController.post({
-            upload: {paramId: 'cbtId', destination: 'cbt', attribute: 'imgUrl'},
-            parent: {attribute: 'questionId', param: 'questionId'}
-        })
-    )
-
-router.route('/:cbtId/questions/:questionId/options/:optionId')
-    .get(
-        validateJwt,
-        optionController.getByParam({
-            where: [
-                {param: 'questionId', attribue: 'questionId', isRequired: true},
-                {param: 'optionId', attribue: 'id'}
-            ]
-        })
-    )
-    .put(
-        validateJwt,
-        fileUploader,
-        optionController.put({
-            param: 'optionId',
-            upload:{paramId: 'cbtId', destination: 'cbt', attribute: 'imgUrl'},
-        })
-    )
-    .delete(
-        validateJwt,
-        optionController.delete({
-            param: 'optionId', attribute: 'option'
         })
     )
 

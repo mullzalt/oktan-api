@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const { Cbt, CbtQuestion, CbtOption } = require('../db');
+const { Cbt, CbtQuestion, CbtOption, Profile } = require('../db');
 
 const checkAnswer = asyncHandler(async(req, res) =>{
     const {questionId, optionId, isEmpty} = req.body
@@ -44,6 +44,22 @@ let option
 
     return res.json({points})
 
+})
+
+
+const validatePayment = asyncHandler(async(req, res, next) =>{
+    const {userId, cbtId} = req.params
+
+    const profile = await Profile.findOne({
+        where: {userId: userId}
+    })
+
+    if(!profile){
+        res.status(404)
+        throw new Error('User not found')
+    }
+
+    
 })
 
 module.exports = {
