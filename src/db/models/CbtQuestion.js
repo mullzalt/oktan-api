@@ -1,6 +1,7 @@
 const { Sequelize } = require('sequelize');
 const db = require('.');
 const Cbt = require('./Cbt');
+const User = require('./User');
 
 const CbtQuestion = db.sequelize.define('cbt_questions', {
     id: {
@@ -22,10 +23,21 @@ const CbtQuestion = db.sequelize.define('cbt_questions', {
             key: 'id'
         }
     },
+    createdBy: {
+        type: Sequelize.UUID,
+        references: {
+          model: 'users',
+          key: 'id'
+        }
+      },
 })
 
 Cbt.hasMany(CbtQuestion)
 CbtQuestion.belongsTo(Cbt)
+
+CbtQuestion.belongsTo(User, {
+    foreignKey: 'createdBy',
+})
 
 module.exports = CbtQuestion
 

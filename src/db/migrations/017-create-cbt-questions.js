@@ -20,14 +20,18 @@ module.exports = {
         references: {
           model: 'cbts',
           key: 'id'
-        }
+        }, 
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       createdBy: {
         type: Sequelize.UUID,
         references: {
           model: 'users',
           key: 'id'
-        }
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       createdAt: {
         allowNull: false,

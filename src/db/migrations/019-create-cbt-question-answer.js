@@ -14,14 +14,18 @@ module.exports = {
         references: {
           model: 'cbt_question_options',
           references: 'id'
-        }
+        }, 
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       questionId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'cbt_questions',
           references: 'id'
-        }
+        }, 
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       createdAt: {
         allowNull: false,

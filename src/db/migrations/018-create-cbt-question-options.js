@@ -15,12 +15,18 @@ module.exports = {
       imgUrl: {
         type: Sequelize.TEXT
       },
+      isAnswer: {
+        type: Sequelize.BOOLEAN, 
+        defaultValue: false
+      },
       questionId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'cbt_questions',
           references: 'id'
-        }
+        }, 
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       createdAt: {
         allowNull: false,

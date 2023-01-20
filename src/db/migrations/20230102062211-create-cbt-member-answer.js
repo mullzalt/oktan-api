@@ -21,14 +21,18 @@ module.exports = {
         references: {
           model: 'cbt_questions',
           references: 'id'
-        }
+        }, 
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       memberId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'cbt_members',
           references: 'id'
-        }
+        }, 
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       isCorrect: {
         type: Sequelize.BOOLEAN

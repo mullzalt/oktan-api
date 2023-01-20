@@ -14,14 +14,18 @@ module.exports = {
         references: {
           model: 'cbts',
           key: 'id'
-        }
+        }, 
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       memberId: {
         type: Sequelize.UUID,
         references: {
           model: 'user_profiles',
           key: 'id'
-        }
+        }, 
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       score: {
         type: Sequelize.INTEGER

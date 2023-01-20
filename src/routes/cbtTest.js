@@ -1,3 +1,4 @@
+const { checkAnswer } = require('../controllers/CbtController')
 const { CrudController } = require('../controllers/Controller')
 const { fileUploader } = require('../middlewares/fileUpload')
 const { validateJwt } = require('../middlewares/jwtValidation')
@@ -8,44 +9,6 @@ const router = require('express').Router()
 
 const cbtController = new CrudController('Cbt')
 
-router.route('/')
-    .post(
-        validateJwt,
-        fileUploader,
-        cbtController.post({upload: {attribute: 'imgUrl', destination: 'cbt', includeId: true}})
-    )
-    .get(   
-        validateJwt,
-        cbtController.getAll({
-            searchParam: ['title'],
-            otherParam: [
-                { attribute: 'archived', query: 'archived', isBool: true },
-            ], 
-            orders: [
-                {model: 'Cbt', attributes: ['title', 'startDate', 'endDate', 'createdAt']},
-            ], 
-            include: [{
-                model: 'CbtQuestion', nested: false
-            }]
-        })
-    )
-
-router.route('/:cbtId')
-    .put(
-        validateJwt,
-        fileUploader,
-        cbtController.put({upload: {attribute: 'imgUrl', destination: 'cbt', includeId: true}, param: 'cbtId'})
-    )
-    .get(
-        validateJwt,
-        cbtController.getByParam({where: [
-            {attribue: 'id', param: 'cbtId'}
-        ]})
-    )
-    .delete(
-        validateJwt,
-        cbtController.delete({param: 'cbtId', attribute: 'title'})
-    )
 
 const questionController = new CrudController('CbtQuestion')
 
@@ -56,7 +19,7 @@ router.route('/:cbtId/questions')
             {attribute: 'id', param: 'cbtId'}
         ]}),
         questionController.getAll({
-            include: [{model: 'CbtOption', as: 'options', nested: false}],
+            include: [{model: 'CbtOption', as: 'options', nested: false, attributes: {exclude: ['isAnswer']}}, ],
             searchParam: ['question'],
             parentParam: [{
                 attribute: 'CbtId', param: 'cbtId'
@@ -64,18 +27,12 @@ router.route('/:cbtId/questions')
             otherParam: [
                 { attribute: 'startDate', query: 'startDate', isBool: false },
             ], 
+            randomSort: true
         })
     )
     .post(
         validateJwt,
-        findByParam({table: 'Cbt', where: [
-            {attribute: 'id', param: 'cbtId'}
-        ]}),
-        fileUploader,
-        questionController.post({
-            upload: {paramId: 'cbtId', destination: 'cbt', attribute: 'imgUrl'},
-            parent: {param: 'cbtId', attribute: 'cbtId'}
-        })
+        checkAnswer
     )
 
 router.route('/:cbtId/questions/:questionId')

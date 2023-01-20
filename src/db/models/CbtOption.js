@@ -11,6 +11,7 @@ const CbtOption = db.sequelize.define('cbt_question_options', {
   },
   option: { type: Sequelize.TEXT },
   imgUrl: { type: Sequelize.TEXT },
+  isAnswer: { type: Sequelize.BOOLEAN, defaultValue: false}, 
   questionId: {
     type: Sequelize.INTEGER,
     references: {

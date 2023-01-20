@@ -14,14 +14,19 @@ module.exports = {
         references: {
           model: 'competitions',
           key: 'id'
-        }
+        }, 
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+        
       },
       cbtId: {
         type: Sequelize.UUID,
         references: {
           model: 'cbts',
           key: 'id'
-        }
+        }, 
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       },
       createdAt: {
         allowNull: false,

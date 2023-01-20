@@ -2,7 +2,7 @@ const db = require(".")
 
 const Competition = require("./Competition")
 const BankAccount = require("./BankAccount")
-const Member = require("./Member")
+const Member = require("./Profile")
 
 const Invoice = db.sequelize.define("invoice", {
     id: {

@@ -42,7 +42,7 @@ const Cbt = db.sequelize.define('cbts', {
   },
   archived: {
     type: Sequelize.BOOLEAN,
-    defaultValue: false
+    defaultValue: true
   }
 }, {
   freezeTableName: true,
