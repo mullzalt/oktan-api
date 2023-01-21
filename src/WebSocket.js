@@ -33,6 +33,62 @@ class WebSocket {
 
     listen() {
         console.log('Socket io successfully connected')
+
+
+        const adminNameSpace = this.io.of('/moderators')
+
+        const userNameSpace = this.io.of('/users')
+
+        adminNameSpace.on('connection', (socket) => {
+            socket.on('cbt:requestJoin', (payload, callback) => {
+                if (typeof callback !== "function") {
+                    return socket.disconnect();
+                }
+
+                const { senderId } = payload
+                if (!senderId) {
+                    return callback({
+                        status: 'KO',
+                        error: 'payload not fullfiled'
+                    })
+                }
+
+                adminNameSpace.emit('cbt:newRequest', {
+                    senderId
+                })
+
+                callback({
+                    status: 'OK',
+                })
+            })
+        })
+
+        userNameSpace.on('connection', (socket) => {
+            socket.on('cbt:newJoinRequest', (payload, callback) => {
+                if (typeof callback !== "function") {
+                    return socket.disconnect();
+                }
+
+                const { senderId } = payload
+                if (!senderId) {
+                    return callback({
+                        status: 'KO',
+                        error: 'payload not fullfiled'
+                    })
+                }
+
+                adminNameSpace.emit('cbt:requestJoin', {
+                    senderId: senderId
+                }, (callback) => {})
+
+
+                callback({
+                    status: 'OK',
+                    senderId: senderId
+                })
+            })
+        })
+
         this.io.on('connection', (socket) => {
 
               //send and get message

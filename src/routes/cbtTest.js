@@ -18,6 +18,16 @@ router.route('/:userId/cbts').get(
     })
 )
 
+router.route('/:userId/cbts/:cbtId').get(
+    validateJwt, 
+    cbtMemberController.getByParam({
+        where: [
+            {param: 'userId', attribue: 'userId', isRequired: true},
+            {param: 'cbtId', attribue: 'cbtId', isRequired: true},
+        ]
+    })
+)
+
 
 router.route('/:userId/cbts/:cbtId').post(
     validateJwt, 
